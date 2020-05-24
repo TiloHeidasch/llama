@@ -8,8 +8,60 @@ import { Llama, Item, ItemCategory } from '@llama/api-interfaces';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  llamas: Llama[] = [{ name: 'first', created: new Date() }, { name: 'second', created: new Date() }];
+  llamas: Llama[] = [{
+    name: 'first',
+    created: new Date(),
+    items: [
+      {
+        name: 'abc',
+        amount: '12',
+        unit: 'kg',
+        category: { name: '1' }
+      },
+      {
+        name: 'def',
+        category: { name: '1' }
+      },
+      {
+        name: 'ghi',
+        amount: '12',
+        category: { name: '1' }
+      },
+      {
+        name: 'hjk',
+        amount: '12',
+        unit: 'kg',
+        category: { name: '2' }
+      },
+      {
+        name: 'tzu',
+        category: { name: '2' }
+      },
+      {
+        name: 'iop',
+        amount: '12',
+        category: { name: '2' }
+      },
+      {
+        name: 'rtz',
+        amount: '12',
+        unit: 'kg',
+      },
+      {
+        name: 'wer',
+      },
+      {
+        name: 'bnm',
+        amount: '12',
+      },
+    ]
+  },
+  {
+    name: 'second',
+    created: new Date()
+  }];
   activeLlama: Llama = this.llamas[0];
+  activeCategories: ItemCategory[] = this.getCategories();
   editNameFuse: boolean = false;
   newItemFuse: boolean = false;
   editLlamaNameMode: boolean = false;
@@ -18,6 +70,28 @@ export class AppComponent {
   newItemString: string = '';
   //hello$ = this.http.get<Message>('/api/hello');
   constructor(private http: HttpClient) { }
+  getCategories(): ItemCategory[] {
+    const categories: ItemCategory[] = [];
+    const rest: ItemCategory = { name: 'Rest', items: [] };
+    this.activeLlama.items.forEach(item => {
+      if (item.category === undefined) {
+        rest.items.push(item);
+      } else {
+        let index = categories.findIndex((element) => element.name === item.category.name);
+        if (index === -1) {
+          categories.push(JSON.parse(JSON.stringify(item.category)));
+          index = categories.length - 1;
+        }
+        if (categories[index].items === undefined) {
+          categories[index].items = [];
+        }
+        categories[index].items.push(item);
+      }
+    });
+    categories.push(rest);
+    return categories;
+  }
+
   addNewLlama() {
     const newLlama: Llama = { name: 'New Llama', created: new Date() };
     this.llamas.push(newLlama);
@@ -38,6 +112,7 @@ export class AppComponent {
     if (this.activeLlama.items === undefined) { this.activeLlama.items = []; }
     this.activeLlama.items.push(this.parseNewItem(this.newItemString));
     this.newItemString = '';
+    this.update();
   }
   endNewItemMode() {
     if (this.newItemFuse) {
@@ -55,18 +130,15 @@ export class AppComponent {
       const unit: string = amountUnit.replace(amount, '').trim();
       const name: string = string.replace(amountUnit, '').trim();
       const item: Item = { name, amount, unit };
-      console.log(item);
       return item;
     } catch (ignored) {
       try {
         const amount: string = string.match(this.getAmountRegexp()).toString().trim();
         const name: string = string.replace(amount, '').trim();
         const item: Item = { name, amount };
-        console.log(item);
         return item;
       } catch (ignored) {
         const item: Item = { name: string };
-        console.log(item);
         return item;
       }
     }
@@ -124,5 +196,8 @@ export class AppComponent {
       this.editLlamaNameMode = false;
       //TODO Update name on remote
     }
+  }
+  update() {
+    this.activeCategories = this.getCategories();
   }
 }

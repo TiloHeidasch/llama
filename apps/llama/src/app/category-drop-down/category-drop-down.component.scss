@@ -1,0 +1,17 @@
+#category-header {
+    display: flex;
+    justify-content: space-between;
+}
+#expanded-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 2rem;
+}
+.expansion-toggle {
+    font-size: 2rem;
+}
+#header-start {
+    display: flex;
+}

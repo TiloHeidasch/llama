@@ -31,7 +31,11 @@
   </mat-drawer>
   <!-- Content -->
   <div class="sidenav-content paper">
-    <span class="pencil">This is some Text in content</span>
+    <div class="categories-container">
+      <llama-category-drop-down *ngFor="let category of activeCategories;let i = index" [category]='category'>
+      </llama-category-drop-down>
+    </div>
+    <!-- Bottom Section -->
     <div class="new-item-section" (clickOutside)='endNewItemMode()'>
       <div class="new-item-container" *ngIf="newItemMode"
         [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">

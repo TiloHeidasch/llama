@@ -11,6 +11,7 @@ export interface Item {
   amount?: string;
   unit?: string;
   category?: ItemCategory;
+  done?: boolean;
 }
 export interface ItemCategory {
   name: string;

@@ -1,0 +1,21 @@
+<div class="category-container">
+    <div id="category-header" (click)="toggleExpansion()">
+        <div id="header-start">
+            <div id="expanded-marker">
+                <mat-icon class="expansion-toggle" *ngIf="!isExpanded">keyboard_arrow_right</mat-icon>
+                <mat-icon class="expansion-toggle" *ngIf="isExpanded">keyboard_arrow_down</mat-icon>
+            </div>
+            <div id="category-name">
+                <span class="pencil">{{category.name}}</span>
+            </div>
+        </div>
+        <div id="header-end">
+            <div id="done-item-counter">
+                <span class="pencil-small">{{getDoneItems()}}/{{getTotalItems()}}</span>
+            </div>
+        </div>
+    </div>
+    <div id="category-items-container" *ngIf="isExpanded">
+        <llama-item-check-box *ngFor="let item of category.items" [item]='item'></llama-item-check-box>
+    </div>
+</div>
