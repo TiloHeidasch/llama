@@ -18,5 +18,6 @@ export class ItemCheckBoxComponent implements OnInit {
     } else {
       this.item.done = !this.item.done;
     }
+    //TODO update remote
   }
 }
