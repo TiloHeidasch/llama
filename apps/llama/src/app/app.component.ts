@@ -127,7 +127,31 @@ export class AppComponent {
     try {
       const amountUnit: string = string.match(this.getAmountUnitRegexp()).toString().trim();
       const amount: string = amountUnit.match(this.getAmountRegexp()).toString().trim();
-      const unit: string = amountUnit.replace(amount, '').trim();
+      let unit: string = amountUnit.replace(amount, '').trim();
+      switch (unit) {
+        case 'Gramm':
+        case 'gramm':
+        case 'G':
+          unit = 'g'
+          break;
+        case 'Kg':
+        case 'kilogramm':
+        case 'Kilogramm':
+          unit = 'kg'
+          break;
+        case 'Stk':
+        case 'Stück':
+          unit = 'stk'
+          break;
+
+        case 'Pkg':
+        case 'Packung':
+        case 'Packungen':
+          unit = 'pkg'
+          break;
+        default:
+          break;
+      }
       const name: string = string.replace(amountUnit, '').trim();
       const item: Item = { name, amount, unit };
       return item;
@@ -151,8 +175,14 @@ export class AppComponent {
     const units: string[] = [
       'g',
       'G',
+      'gramm',
+      'Gramm',
       'kg',
       'Kg',
+      'kilo',
+      'Kilo',
+      'kilogramm',
+      'Kilogramm',
       'stk',
       'Stk',
       'Stück',
