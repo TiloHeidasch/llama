@@ -9,6 +9,7 @@ export interface Llama {
 export interface Item {
   name: string;
   amount?: string;
+  unit?: string;
   category?: ItemCategory;
 }
 export interface ItemCategory {

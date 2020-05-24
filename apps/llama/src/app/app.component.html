@@ -32,10 +32,18 @@
   <!-- Content -->
   <div class="sidenav-content paper">
     <span class="pencil">This is some Text in content</span>
-    <button class="floating-action-button"
-      [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
-      (click)="addItem()" mat-fab>
-      <mat-icon class="black">add</mat-icon>
-    </button>
+    <div class="new-item-section" (clickOutside)='endNewItemMode()'>
+      <div class="new-item-container" *ngIf="newItemMode"
+        [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
+        <mat-form-field class="new-item-form-field">
+          <input matInput [(ngModel)]="newItemString">
+        </mat-form-field>
+      </div>
+      <button class="floating-action-button"
+        [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
+        (click)="addItem()" mat-fab>
+        <mat-icon class="black">add</mat-icon>
+      </button>
+    </div>
   </div>
 </mat-drawer-container>
