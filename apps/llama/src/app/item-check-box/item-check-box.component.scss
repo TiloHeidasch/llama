@@ -1,0 +1,16 @@
+#name-container {
+    width: 70%;
+}
+#item-container {
+    display: flex;
+    justify-content: space-between;
+}
+#cross {
+    width: 0.4rem;
+    left: -0.1rem;
+    position: relative;
+}
+#checkbox-container {
+    display: flex;
+    justify-content: center;
+}

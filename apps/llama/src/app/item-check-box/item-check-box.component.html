@@ -1,1 +1,16 @@
-<p>item-check-box works!</p>
+<div id="item-container" (click)="toggleDone()">
+    <div id="checkbox-container">
+        <div id="open-bracket"><span class="pencil-small">(</span></div>
+        <div id="cross"><span *ngIf="item.done" class="pencil-small">X</span></div>
+        <div id="close-bracket"><span class="pencil-small">)</span></div>
+    </div>
+    <div id="amount-container">
+        <span class="pencil-small">{{item.amount}}</span>
+    </div>
+    <div id="unit-container">
+        <span class="pencil-small">{{item.unit}}</span>
+    </div>
+    <div id="name-container">
+        <span class="pencil-small">{{item.name}}</span>
+    </div>
+</div>

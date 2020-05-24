@@ -12,5 +12,11 @@ export class ItemCheckBoxComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  toggleDone() {
+    if (this.item.done === undefined) {
+      this.item.done = true;
+    } else {
+      this.item.done = !this.item.done;
+    }
+  }
 }
