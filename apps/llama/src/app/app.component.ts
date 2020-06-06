@@ -13,9 +13,7 @@ export class AppComponent implements OnInit {
   activeLlama: Llama;
   activeCategories: ItemCategory[];
   editNameFuse: boolean = false;
-  newItemFuse: boolean = false;
   editLlamaNameMode: boolean = false;
-  newItemMode: boolean = false;
   activeLlamaId: number = 0;
   newItemString: string = '';
   constructor(private service: LlamaService) { }
@@ -46,41 +44,26 @@ export class AppComponent implements OnInit {
     return categories;
   }
 
-  addNewLlama() {
-    const newLlama: Llama = new Llama('New Llama');
+  async addNewLlama() {
+    const newLlama: Llama = await this.service.createNewLlama('New Llama');
     this.llamas.push(newLlama);
     this.activeLlama = newLlama;
     this.activeLlamaId = this.llamas.length - 1;
-    //TODO: push new Llama to remote
-    this.service.postNewLlama(newLlama);
   }
   addItem() {
-    if (!this.newItemMode) {
-      this.newItemMode = true;
-      this.newItemFuse = false;
-      setTimeout(() => { this.newItemFuse = true; }, 100);
-    } else {
-      this.pushStringToNewItem()
+    this.pushStringToNewItem()
+  }
+  private async pushStringToNewItem() {
+    if (this.newItemString.trim() !== '') {
+      const newItem: Item = await this.parseNewItem(this.newItemString);
+      this.activeLlama.items.push(newItem);
+      this.newItemString = '';
+      this.update();
     }
   }
-  private pushStringToNewItem() {
-    if (this.activeLlama.items === undefined) { this.activeLlama.items = []; }
-    this.activeLlama.items.push(this.parseNewItem(this.newItemString));
-    this.newItemString = '';
-    this.update();
-  }
-  endNewItemMode() {
-    if (this.newItemFuse) {
-      if (this.newItemString !== '') {
-        this.pushStringToNewItem();
-      }
-      this.newItemFuse = false;
-      this.newItemMode = false;
-    }
-  }
-  parseNewItem(string: string): Item {
+  async parseNewItem(newItemString: string): Promise<Item> {
     try {
-      const amountUnit: string = string.match(this.getAmountUnitRegexp()).toString().trim();
+      const amountUnit: string = newItemString.match(this.getAmountUnitRegexp()).toString().trim();
       const amount: string = amountUnit.match(this.getAmountRegexp()).toString().trim();
       let unit: string = amountUnit.replace(amount, '').trim();
       switch (unit) {
@@ -107,17 +90,17 @@ export class AppComponent implements OnInit {
         default:
           break;
       }
-      const name: string = string.replace(amountUnit, '').trim();
-      const item: Item = new Item(name, amount, unit);
+      const name: string = newItemString.replace(amountUnit, '').trim();
+      const item: Item = await this.service.createNewItem(this.activeLlama, name, amount, unit);
       return item;
     } catch (ignored) {
       try {
-        const amount: string = string.match(this.getAmountRegexp()).toString().trim();
-        const name: string = string.replace(amount, '').trim();
-        const item: Item = new Item(name, amount);
+        const amount: string = newItemString.match(this.getAmountRegexp()).toString().trim();
+        const name: string = newItemString.replace(amount, '').trim();
+        const item: Item = await this.service.createNewItem(this.activeLlama, name, amount);
         return item;
       } catch (ignored) {
-        const item: Item = new Item(string);
+        const item: Item = await this.service.createNewItem(this.activeLlama, newItemString);
         return item;
       }
     }
@@ -169,17 +152,20 @@ export class AppComponent implements OnInit {
   }
   categories() { }
   select(llama, id) {
-    this.activeLlama = llama; this.activeLlamaId = id;
+    console.log({ activeLlama: this.activeLlama, llama });
+    this.activeLlama = llama;
+    this.activeLlamaId = id;
+    this.update();
   }
   editName() {
     this.editNameFuse = false;
     setTimeout(() => { this.editNameFuse = true; }, 100);
     this.editLlamaNameMode = true;
   }
-  stopEdit() {
+  async stopEdit() {
     if (this.editNameFuse) {
       this.editLlamaNameMode = false;
-      //TODO Update name on remote
+      this.activeLlama = await this.service.updateLlama(this.activeLlama);
     }
   }
   update() {

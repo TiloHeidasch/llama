@@ -40,8 +40,8 @@
         </llama-category-drop-down>
       </div>
       <!-- Bottom Section -->
-      <div class="new-item-section" (clickOutside)='endNewItemMode()'>
-        <div class="new-item-container" *ngIf="newItemMode"
+      <div class="new-item-section" (clickOutside)='addItem()'>
+        <div class="new-item-container"
           [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
           <mat-form-field class="new-item-form-field">
             <input matInput [(ngModel)]="newItemString">
