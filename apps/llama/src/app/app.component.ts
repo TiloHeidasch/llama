@@ -1,75 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Llama, Item, ItemCategory } from '@llama/api-interfaces';
+import { LlamaService } from './llama.service';
 
 @Component({
   selector: 'llama-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  llamas: Llama[] = [{
-    name: 'first',
-    created: new Date(),
-    items: [
-      {
-        name: 'abc',
-        amount: '12',
-        unit: 'kg',
-        category: { name: '1' }
-      },
-      {
-        name: 'def',
-        category: { name: '1' }
-      },
-      {
-        name: 'ghi',
-        amount: '12',
-        category: { name: '1' }
-      },
-      {
-        name: 'hjk',
-        amount: '12',
-        unit: 'kg',
-        category: { name: '2' }
-      },
-      {
-        name: 'tzu',
-        category: { name: '2' }
-      },
-      {
-        name: 'iop',
-        amount: '12',
-        category: { name: '2' }
-      },
-      {
-        name: 'rtz',
-        amount: '12',
-        unit: 'kg',
-      },
-      {
-        name: 'wer',
-      },
-      {
-        name: 'bnm',
-        amount: '12',
-      },
-    ]
-  },
-  {
-    name: 'second',
-    created: new Date()
-  }];
-  activeLlama: Llama = this.llamas[0];
-  activeCategories: ItemCategory[] = this.getCategories();
+export class AppComponent implements OnInit {
+  llamas: Llama[];
+  activeLlama: Llama;
+  activeCategories: ItemCategory[];
   editNameFuse: boolean = false;
   newItemFuse: boolean = false;
   editLlamaNameMode: boolean = false;
   newItemMode: boolean = false;
   activeLlamaId: number = 0;
   newItemString: string = '';
-  //hello$ = this.http.get<Message>('/api/hello');
-  constructor(private http: HttpClient) { }
+  constructor(private service: LlamaService) { }
+  async ngOnInit() {
+    this.llamas = await this.service.getAllLlamas();
+    this.activeLlama = this.llamas[0];
+    this.activeCategories = this.getCategories();
+  }
   getCategories(): ItemCategory[] {
     const categories: ItemCategory[] = [];
     const rest: ItemCategory = { name: 'Rest', items: [] };
@@ -93,11 +47,12 @@ export class AppComponent {
   }
 
   addNewLlama() {
-    const newLlama: Llama = { name: 'New Llama', created: new Date() };
+    const newLlama: Llama = new Llama('New Llama');
     this.llamas.push(newLlama);
     this.activeLlama = newLlama;
     this.activeLlamaId = this.llamas.length - 1;
     //TODO: push new Llama to remote
+    this.service.postNewLlama(newLlama);
   }
   addItem() {
     if (!this.newItemMode) {
