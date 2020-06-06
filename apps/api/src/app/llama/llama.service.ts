@@ -13,10 +13,9 @@ export class LlamaService {
         return file.llamas.sort((llama1, llama2) => (new Date(llama1.created).getTime() - new Date(llama2.created).getTime()));
     }
     async getLlamaById(id: string): Promise<Llama> {
-        const file = await this.loadFile();
-        const llama: Llama = file.llamas.find(llama => llama.id === id);
+        const llamas: Llama[] = await this.getAllLlamas();
+        const llama: Llama = llamas.find(llama => llama.id === id);
         if (llama === undefined) {
-            console.log(file);
             throw new NotFoundException('Llama with id ' + id + ' not found');
         }
         return llama;
