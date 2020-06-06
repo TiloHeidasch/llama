@@ -10,7 +10,7 @@ export class LlamaService {
 
     async getAllLlamas(): Promise<Llama[]> {
         const file = await this.loadFile();
-        return file.llamas;
+        return file.llamas.sort((llama1, llama2) => (new Date(llama1.created).getTime() - new Date(llama2.created).getTime()));
     }
     async getLlamaById(id: string): Promise<Llama> {
         const file = await this.loadFile();
