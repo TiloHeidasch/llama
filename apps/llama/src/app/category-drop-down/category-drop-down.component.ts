@@ -8,7 +8,7 @@ import { ItemCategory } from '@llama/api-interfaces';
 })
 export class CategoryDropDownComponent implements OnInit {
   @Input('category') category: ItemCategory;
-  isExpanded = false;
+  isExpanded = true;
   constructor() { }
 
   ngOnInit(): void {
