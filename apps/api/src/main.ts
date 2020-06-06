@@ -18,7 +18,7 @@ async function bootstrap() {
     .setTitle('Llama API')
     .setDescription('An API that lets you track what groceries you have to buy')
     .setVersion('1.0')
-    .addTag('Llama')
+    .addTag('llama')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
