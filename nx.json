@@ -14,17 +14,18 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ]
       }
     }
   },
   "projects": {
     "llama": {
       "tags": []
-    },
-    "llama-e2e": {
-      "tags": [],
-      "implicitDependencies": ["llama"]
     },
     "api": {
       "tags": []
