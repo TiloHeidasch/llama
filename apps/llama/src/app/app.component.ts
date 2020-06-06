@@ -108,16 +108,16 @@ export class AppComponent implements OnInit {
           break;
       }
       const name: string = string.replace(amountUnit, '').trim();
-      const item: Item = { name, amount, unit };
+      const item: Item = new Item(name, amount, unit);
       return item;
     } catch (ignored) {
       try {
         const amount: string = string.match(this.getAmountRegexp()).toString().trim();
         const name: string = string.replace(amount, '').trim();
-        const item: Item = { name, amount };
+        const item: Item = new Item(name, amount);
         return item;
       } catch (ignored) {
-        const item: Item = { name: string };
+        const item: Item = new Item(string);
         return item;
       }
     }

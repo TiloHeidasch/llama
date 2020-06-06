@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-//import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 export class CreateLlama {
   //@ApiProperty({ description: 'The name of the new Llama', example: 'Groceries' })
   name: string;
@@ -11,12 +11,13 @@ export class CreateItem {
   amount?: string;
   //@ApiProperty({ description: 'The unit of the amount of the Item', example: 'kg', required: false })
   unit?: string;
+  done?: boolean;
 }
 export class Llama {
-  id: string;
+  readonly id: string;
   name: string;
-  created: Date;
-  items?: Item[];
+  readonly created: Date;
+  items: Item[];
   constructor(name: string) {
     this.id = uuidv4();
     this.name = name;
@@ -25,20 +26,24 @@ export class Llama {
   }
 }
 export class Item {
-  id: string;
-  created: Date;
+  readonly id: string;
+  readonly created: Date;
   name: string;
   done: boolean;
   amount?: string;
   unit?: string;
   category?: ItemCategory;
-  constructor(name: string, amount?: string, unit?: string) {
+  constructor(name: string, amount?: string, unit?: string, done?: boolean) {
     this.id = uuidv4();
     this.created = new Date();
     this.name = name;
     this.amount = amount;
     this.unit = unit;
-    this.done = false;
+    if (done !== undefined) {
+      this.done = done;
+    } else {
+      this.done = false;
+    }
   }
 }
 export interface ItemCategory {
