@@ -9,8 +9,13 @@ export class LlamaService {
     private readonly logger = new Logger(LlamaService.name);
 
     async getAllLlamas(): Promise<Llama[]> {
-        const file = await this.loadFile();
-        return file.llamas.sort((llama1, llama2) => (new Date(llama1.created).getTime() - new Date(llama2.created).getTime()));
+        const llamas: Llama[] = await (await this.loadFile()).llamas;
+        if (llamas.length > 0) {
+            return llamas.sort((llama1, llama2) => (new Date(llama1.created).getTime() - new Date(llama2.created).getTime()));
+        } else {
+            const dummyLlama = await this.addNewLlama('My first Llama');
+            return [dummyLlama];
+        }
     }
     async getLlamaById(id: string): Promise<Llama> {
         const llamas: Llama[] = await this.getAllLlamas();
