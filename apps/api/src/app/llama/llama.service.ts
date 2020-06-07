@@ -93,7 +93,7 @@ export class LlamaService {
         }
     }
     async deleteItemById(llamaId: string, id: string) {
-        const llama: Llama = await this.getLlamaById(id);
+        const llama: Llama = await this.getLlamaById(llamaId);
         llama.items = llama.items.filter(item => item.id !== id);
         this.updateLlama(llama);
     }
