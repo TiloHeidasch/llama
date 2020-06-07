@@ -10,7 +10,11 @@ export class LlamaService {
   constructor(private http: HttpClient) { }
 
   async getAllLlamas(): Promise<Llama[]> {
-    return await this.http.get<Llama[]>('/api/llama').toPromise();
+    let llamas: Llama[] = await (await this.http.get<Llama[]>('/api/llama').toPromise()).sort((llama1, llama2) => (new Date(llama1.created).getTime() - new Date(llama2.created).getTime()));
+    llamas.forEach(llama => {
+      llama.items = llama.items.sort((item1, item2) => (new Date(item1.created).getTime() - new Date(item2.created).getTime()));
+    });
+    return llamas;
   }
   async createNewLlama(name: string): Promise<Llama> {
     const createLlama: CreateLlama = { name };

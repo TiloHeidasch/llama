@@ -11,7 +11,7 @@ export class LlamaService {
     async getAllLlamas(): Promise<Llama[]> {
         const llamas: Llama[] = await (await this.loadFile()).llamas;
         if (llamas.length > 0) {
-            return llamas.sort((llama1, llama2) => (new Date(llama1.created).getTime() - new Date(llama2.created).getTime()));
+            return llamas;
         } else {
             const dummyLlama = await this.addNewLlama('My first Llama');
             return [dummyLlama];
