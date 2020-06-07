@@ -38,13 +38,17 @@
 .floating-action-button {
   margin: 1rem;
 }
-.new-item-section {
-  display: flex;
-  justify-content: flex-end;
+.bottom-section {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.new-item-section {
+  display: flex;
+  justify-content: flex-end;
 }
 .new-item-container {
   margin: 1rem;

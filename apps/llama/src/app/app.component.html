@@ -14,10 +14,10 @@
     </mat-form-field>
     <div class="delete-toggle-section">
       <mat-slide-toggle color="warn" [(ngModel)]="deletemode">
-        <ng-container *ngIf="deletemode; else elseTemplate">
+        <ng-container *ngIf="deletemode; else deleteMockTemplate">
           <mat-icon color="warn">delete_forever</mat-icon>
         </ng-container>
-        <ng-template #elseTemplate>
+        <ng-template #deleteMockTemplate>
           <mat-icon>delete_outline</mat-icon>
         </ng-template>
 
@@ -55,18 +55,30 @@
         </llama-category-drop-down>
       </div>
       <!-- Bottom Section -->
-      <div class="new-item-section" (clickOutside)='addItem()'>
-        <div class="new-item-container"
-          [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
-          <mat-form-field class="new-item-form-field">
-            <input matInput [(ngModel)]="newItemString">
-          </mat-form-field>
-        </div>
-        <button class="floating-action-button"
-          [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
-          (click)="addItem()" mat-fab>
-          <mat-icon class="black">add</mat-icon>
-        </button>
+      <div class="bottom-section">
+        <ng-container *ngIf="deletemode; else newItemTemplate">
+          <div class="cleanup-section">
+            <button class="floating-action-button" color="warn" (click)="cleanupItems()" mat-fab>
+              <mat-icon class="black">archive</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+        <ng-template #newItemTemplate>
+          <div class="new-item-section" (clickOutside)='addItem()'>
+            <div class="new-item-container"
+              [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
+              <mat-form-field class="new-item-form-field">
+                <input matInput [(ngModel)]="newItemString">
+              </mat-form-field>
+            </div>
+            <button class="floating-action-button"
+              [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
+              (click)="addItem()" mat-fab>
+              <mat-icon class="black">add</mat-icon>
+            </button>
+          </div>
+        </ng-template>
+
       </div>
     </div>
   </mat-drawer-container>

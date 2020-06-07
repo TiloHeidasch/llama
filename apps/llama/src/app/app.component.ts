@@ -55,6 +55,11 @@ export class AppComponent implements OnInit, UpdateCallback {
   deleteLlama(llama: Llama) {
     this.service.deleteLlama(llama);
   }
+  cleanupItems() {
+    this.activeLlama.items = this.activeLlama.items.filter(item => !item.done);
+    this.service.updateLlama(this.activeLlama)
+    this.update();
+  }
   addItem() {
     this.pushStringToNewItem()
   }
