@@ -2,84 +2,85 @@
   <div id="splash"><img src="../assets/splash.jpg"></div>
 </ng-container>
 <ng-template #elseTemplate>
-  <!-- Toolbar -->
-  <mat-toolbar class="toolbar"
-    [ngClass]=" {'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan': activeLlamaId%3===2}">
-    <button mat-icon-button (click)="drawer.toggle()">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span *ngIf="!editLlamaNameMode" class="heading" (click)="editName()">{{activeLlama.name}}</span>
-    <mat-form-field *ngIf="editLlamaNameMode" (clickOutside)="stopEdit()">
-      <input matInput [(ngModel)]=" activeLlama.name">
-    </mat-form-field>
-    <div class="delete-toggle-section">
-      <mat-slide-toggle color="warn" [(ngModel)]="deletemode">
-        <ng-container *ngIf="deletemode; else deleteMockTemplate">
-          <mat-icon color="warn">delete_forever</mat-icon>
-        </ng-container>
-        <ng-template #deleteMockTemplate>
-          <mat-icon>delete_outline</mat-icon>
-        </ng-template>
+  <div class="app-container">
+    <!-- Toolbar -->
+    <mat-toolbar class="toolbar"
+      [ngClass]=" {'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan': activeLlamaId%3===2}">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span *ngIf="!editLlamaNameMode" class="heading" (click)="editName()">{{activeLlama.name}}</span>
+      <mat-form-field *ngIf="editLlamaNameMode" (clickOutside)="stopEdit()">
+        <input matInput [(ngModel)]=" activeLlama.name">
+      </mat-form-field>
+      <div class="delete-toggle-section">
+        <mat-slide-toggle color="warn" [(ngModel)]="deletemode">
+          <ng-container *ngIf="deletemode; else deleteMockTemplate">
+            <mat-icon color="warn">delete_forever</mat-icon>
+          </ng-container>
+          <ng-template #deleteMockTemplate>
+            <mat-icon>delete_outline</mat-icon>
+          </ng-template>
 
-      </mat-slide-toggle>
-    </div>
-  </mat-toolbar>
-  <mat-drawer-container class="drawer-container">
-    <!-- Drawer -->
-    <mat-drawer #drawer class="sidenav" mode="over">
-      <div class="drawer-logo-container">
-        <img class="drawer-logo" src="../assets/logo.png">
+        </mat-slide-toggle>
       </div>
-      <mat-nav-list class="llama-navigation-list">
-        <mat-list-item class="sidebar-nav-item" *ngFor="let llama of llamas;let i = index" (click)="select(llama,i)"
-          [ngClass]="{'blue': i%3===0,'pink': i%3===1,'cyan': i%3===2}">
-          <div class="llama-deletion-container" *ngIf="deletemode">
-            <mat-icon color="warn" (click)="deleteLlama(llama)">delete_forever</mat-icon>
-          </div>
-          <span id="selected" *ngIf="activeLlama===llama">></span><span>{{llama.name}}</span>
-          <div class="shadow"></div>
-        </mat-list-item>
-        <mat-list-item class="sidebar-nav-item" id="create-new" (click)="addNewLlama()">New
-          Llama
-        </mat-list-item>
-      </mat-nav-list>
-      <mat-nav-list class="settings-navigation-list">
-        <mat-list-item class="sidebar-nav-item" id="categories" (click)="categories()">Categories</mat-list-item>
-      </mat-nav-list>
-    </mat-drawer>
-    <!-- Content -->
-    <div class="sidenav-content paper">
-      <div class="categories-container">
-        <llama-category-drop-down *ngFor="let category of activeCategories;let i = index" [category]='category'
-          [llama]='activeLlama' [deletemode]='deletemode' [updateCallback]='updateCallback'>
-        </llama-category-drop-down>
-      </div>
-      <!-- Bottom Section -->
-      <div class="bottom-section">
-        <ng-container *ngIf="deletemode; else newItemTemplate">
-          <div class="cleanup-section">
-            <button class="floating-action-button" color="warn" (click)="cleanupItems()" mat-fab>
-              <mat-icon class="black">archive</mat-icon>
-            </button>
-          </div>
-        </ng-container>
-        <ng-template #newItemTemplate>
-          <div class="new-item-section" (clickOutside)='addItem()'>
-            <div class="new-item-container"
-              [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
-              <mat-form-field class="new-item-form-field">
-                <input matInput [(ngModel)]="newItemString">
-              </mat-form-field>
+    </mat-toolbar>
+    <mat-drawer-container class="drawer-container">
+      <!-- Drawer -->
+      <mat-drawer #drawer class="sidenav" mode="over">
+        <div class="drawer-logo-container">
+          <img class="drawer-logo" src="../assets/logo.png">
+        </div>
+        <mat-nav-list class="llama-navigation-list">
+          <mat-list-item class="sidebar-nav-item" *ngFor="let llama of llamas;let i = index" (click)="select(llama,i)"
+            [ngClass]="{'blue': i%3===0,'pink': i%3===1,'cyan': i%3===2}">
+            <div class="llama-deletion-container" *ngIf="deletemode">
+              <mat-icon color="warn" (click)="deleteLlama(llama)">delete_forever</mat-icon>
             </div>
-            <button class="floating-action-button"
-              [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
-              (click)="addItem()" mat-fab>
-              <mat-icon class="black">add</mat-icon>
-            </button>
-          </div>
-        </ng-template>
-
+            <span id="selected" *ngIf="activeLlama===llama">></span><span>{{llama.name}}</span>
+            <div class="shadow"></div>
+          </mat-list-item>
+          <mat-list-item class="sidebar-nav-item" id="create-new" (click)="addNewLlama()">New
+            Llama
+          </mat-list-item>
+        </mat-nav-list>
+        <mat-nav-list class="settings-navigation-list">
+          <mat-list-item class="sidebar-nav-item" id="categories" (click)="categories()">Categories</mat-list-item>
+        </mat-nav-list>
+      </mat-drawer>
+      <!-- Content -->
+      <div class="sidenav-content paper">
+        <div class="categories-container">
+          <llama-category-drop-down *ngFor="let category of activeCategories;let i = index" [category]='category'
+            [llama]='activeLlama' [deletemode]='deletemode' [updateCallback]='updateCallback'>
+          </llama-category-drop-down>
+        </div>
       </div>
+    </mat-drawer-container>
+    <!-- Bottom Section -->
+    <div class="bottom-section" *ngIf="!drawer.opened">
+      <ng-container *ngIf="deletemode; else newItemTemplate">
+        <div class="cleanup-section">
+          <button class="floating-action-button" color="warn" (click)="cleanupItems()" mat-fab>
+            <mat-icon class="black">archive</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+      <ng-template #newItemTemplate>
+        <div class="new-item-section" (clickOutside)='addItem()'>
+          <div class="new-item-container"
+            [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
+            <mat-form-field class="new-item-form-field">
+              <input matInput [(ngModel)]="newItemString" [placeholder]="getNewItemPlaceHolder()">
+            </mat-form-field>
+          </div>
+          <button class="floating-action-button"
+            [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
+            (click)="addItem()" mat-fab>
+            <mat-icon class="black">add</mat-icon>
+          </button>
+        </div>
+      </ng-template>
     </div>
-  </mat-drawer-container>
+  </div>
 </ng-template>

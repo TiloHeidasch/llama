@@ -16,6 +16,7 @@ export class AppComponent implements OnInit, UpdateCallback {
   editLlamaNameMode: boolean = false;
   deletemode: boolean = false;
   updateCallback: UpdateCallback = this;
+  newItemPlaceholderCache: string = '';
   activeLlamaId: number = 0;
   newItemString: string = '';
   constructor(private service: LlamaService) { }
@@ -61,7 +62,8 @@ export class AppComponent implements OnInit, UpdateCallback {
     this.update();
   }
   addItem() {
-    this.pushStringToNewItem()
+    this.pushStringToNewItem();
+    this.resetItemPlaceholderCache();
   }
   private async pushStringToNewItem() {
     if (this.newItemString.trim() !== '') {
@@ -180,6 +182,44 @@ export class AppComponent implements OnInit, UpdateCallback {
   }
   update() {
     this.activeCategories = this.getCategories();
+  }
+  getNewItemPlaceHolder(): string {
+    console.log({ newItemPlaceholderCache: this.newItemPlaceholderCache });
+
+    if (this.newItemPlaceholderCache === '') {
+      const amount: string = this.getRandomAmount();
+      const unit: string = this.getRandomUnit();
+      const item: string = this.getRandomItemName();
+      switch (this.randbetween(0, 10)) {
+        case 0:
+          //no unit
+          this.newItemPlaceholderCache = amount + ' ' + item;
+        case 1:
+          //no amount no unit
+          this.newItemPlaceholderCache = item;
+        default:
+          //amount unit and name
+          this.newItemPlaceholderCache = amount + unit + ' ' + item;
+      }
+    }
+    return this.newItemPlaceholderCache.toString();
+  }
+  private resetItemPlaceholderCache() {
+    this.newItemPlaceholderCache = '';
+  }
+  getRandomItemName(): string {
+    const itemNames: string[] = ['Banana', 'Apple', 'Cherry',];
+    return itemNames[this.randbetween(0, itemNames.length - 1)];
+  }
+  getRandomUnit(): string {
+    const unitNames: string[] = ['kg', 'pcs', 'pieces', 'packs',];
+    return unitNames[this.randbetween(0, unitNames.length - 1)];
+  }
+  getRandomAmount(): string {
+    return this.randbetween(1, 10).toString();
+  }
+  private randbetween(min, max) {
+    return Math.floor(Math.random() * max) + min;
   }
 }
 export interface UpdateCallback {

@@ -1,6 +1,8 @@
 .drawer-container {
   min-height: calc(100% - 56px);
   display: flex;
+  flex: 1;
+  overflow: auto;
 }
 .sidenav-content {
   min-height: 100%;
@@ -8,6 +10,7 @@
 .drawer-logo-container {
   display: flex;
   justify-content: center;
+  padding: 0.5rem;
   .drawer-logo {
     height: 200px;
   }
@@ -45,10 +48,12 @@
   right: 0;
   display: flex;
   justify-content: flex-end;
+  z-index: 1;
 }
 .new-item-section {
   display: flex;
   justify-content: flex-end;
+  width: 100%;
 }
 .new-item-container {
   margin: 1rem;
@@ -75,6 +80,7 @@
 }
 .categories-container {
   padding: 1rem;
+  padding-bottom: calc(56px + 2rem);
 }
 #splash {
   display: flex;
@@ -84,4 +90,17 @@
 .toolbar {
   display: flex;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+.app-container {
+  display: flex;
+  position: absolute;
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
