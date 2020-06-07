@@ -16,6 +16,7 @@
         </div>
     </div>
     <div id="category-items-container" *ngIf="isExpanded">
-        <llama-item-check-box *ngFor="let item of category.items" [item]='item' [llama]='llama'></llama-item-check-box>
+        <llama-item-check-box *ngFor="let item of category.items" [item]='item' [llama]='llama'
+            [deletemode]='deletemode' [updateCallback]='updateCallback'></llama-item-check-box>
     </div>
 </div>

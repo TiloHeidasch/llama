@@ -12,6 +12,17 @@
     <mat-form-field *ngIf="editLlamaNameMode" (clickOutside)="stopEdit()">
       <input matInput [(ngModel)]=" activeLlama.name">
     </mat-form-field>
+    <div class="delete-toggle-section">
+      <mat-slide-toggle color="warn" [(ngModel)]="deletemode">
+        <ng-container *ngIf="deletemode; else elseTemplate">
+          <mat-icon color="warn">delete_forever</mat-icon>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <mat-icon>delete_outline</mat-icon>
+        </ng-template>
+
+      </mat-slide-toggle>
+    </div>
   </mat-toolbar>
   <mat-drawer-container class="drawer-container">
     <!-- Drawer -->
@@ -22,6 +33,9 @@
       <mat-nav-list class="llama-navigation-list">
         <mat-list-item class="sidebar-nav-item" *ngFor="let llama of llamas;let i = index" (click)="select(llama,i)"
           [ngClass]="{'blue': i%3===0,'pink': i%3===1,'cyan': i%3===2}">
+          <div class="llama-deletion-container" *ngIf="deletemode">
+            <mat-icon color="warn" (click)="deleteLlama(llama)">delete_forever</mat-icon>
+          </div>
           <span id="selected" *ngIf="activeLlama===llama">></span><span>{{llama.name}}</span>
           <div class="shadow"></div>
         </mat-list-item>
@@ -37,7 +51,7 @@
     <div class="sidenav-content paper">
       <div class="categories-container">
         <llama-category-drop-down *ngFor="let category of activeCategories;let i = index" [category]='category'
-          [llama]='activeLlama'>
+          [llama]='activeLlama' [deletemode]='deletemode' [updateCallback]='updateCallback'>
         </llama-category-drop-down>
       </div>
       <!-- Bottom Section -->

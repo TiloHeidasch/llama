@@ -8,12 +8,14 @@ import { LlamaService } from './llama.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, UpdateCallback {
   llamas: Llama[];
   activeLlama: Llama;
   activeCategories: ItemCategory[];
   editNameFuse: boolean = false;
   editLlamaNameMode: boolean = false;
+  deletemode: boolean = false;
+  updateCallback: UpdateCallback = this;
   activeLlamaId: number = 0;
   newItemString: string = '';
   constructor(private service: LlamaService) { }
@@ -49,6 +51,9 @@ export class AppComponent implements OnInit {
     this.llamas.push(newLlama);
     this.activeLlama = newLlama;
     this.activeLlamaId = this.llamas.length - 1;
+  }
+  deleteLlama(llama: Llama) {
+    this.service.deleteLlama(llama);
   }
   addItem() {
     this.pushStringToNewItem()
@@ -171,4 +176,7 @@ export class AppComponent implements OnInit {
   update() {
     this.activeCategories = this.getCategories();
   }
+}
+export interface UpdateCallback {
+  update();
 }

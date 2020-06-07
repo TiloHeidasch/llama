@@ -1,5 +1,6 @@
 import { Component, OnInit, Injectable, Input } from '@angular/core';
 import { ItemCategory, Llama } from '@llama/api-interfaces';
+import { UpdateCallback } from '../app.component';
 
 @Component({
   selector: 'llama-category-drop-down',
@@ -9,6 +10,8 @@ import { ItemCategory, Llama } from '@llama/api-interfaces';
 export class CategoryDropDownComponent implements OnInit {
   @Input('llama') llama: Llama;
   @Input('category') category: ItemCategory;
+  @Input('deletemode') deletemode: boolean;
+  @Input('updateCallback') updateCallback: UpdateCallback;
   isExpanded = true;
   constructor() { }
 

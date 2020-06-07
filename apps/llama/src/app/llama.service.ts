@@ -19,11 +19,17 @@ export class LlamaService {
   async updateLlama(llama: Llama): Promise<Llama> {
     return await this.http.put<Llama>('/api/llama', llama).toPromise();
   }
+  async deleteLlama(llama: Llama) {
+    await this.http.delete('/api/llama/' + llama.id).toPromise();
+  }
   async createNewItem(llama: Llama, name: string, amount?: string, unit?: string): Promise<Item> {
     const createItem: CreateItem = { name, amount, unit, done: false };
     return await this.http.post<Item>('/api/llama/' + llama.id + '/item', createItem).toPromise();
   }
   async updateItem(llama: Llama, item: Item): Promise<Item> {
     return await this.http.put<Item>('/api/llama/' + llama.id + '/item', item).toPromise();
+  }
+  async deleteItem(llama: Llama, item: Item) {
+    await this.http.delete('/api/llama/' + llama.id + '/item/' + item.id).toPromise();
   }
 }

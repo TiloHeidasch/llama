@@ -7,6 +7,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule, } from '@angular/material/sidenav';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { FormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 import { A11yModule } from '@angular/cdk/a11y';
 import { BidiModule } from '@angular/cdk/bidi';
@@ -36,6 +38,8 @@ import { PortalModule } from '@angular/cdk/portal';
         MatSidenavModule,
         FormsModule,
         ClickOutsideModule,
+        MatButtonModule,
+        MatSlideToggleModule,
     ]
 })
 export class MaterialModule { }

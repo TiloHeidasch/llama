@@ -1,8 +1,11 @@
 <div id="item-container" (click)="toggleDone()">
     <div id="checkbox-container">
-        <div id="open-bracket"><span class="pencil-small">(</span></div>
-        <div id="cross"><span *ngIf="item.done" class="pencil-small">X</span></div>
-        <div id="close-bracket"><span class="pencil-small">)</span></div>
+        <div id="open-bracket" *ngIf="!deletemode"><span class="pencil-small">(</span></div>
+        <div id="cross" *ngIf="!deletemode"><span *ngIf="item.done" class="pencil-small">X</span></div>
+        <div id="close-bracket" *ngIf="!deletemode"><span class="pencil-small">)</span></div>
+        <div class="item-deletion-container" *ngIf="deletemode">
+            <mat-icon color="warn" (click)="deleteItem()">delete_forever</mat-icon>
+        </div>
     </div>
     <div id="amount-container">
         <span class="pencil-small">{{item.amount}}</span>

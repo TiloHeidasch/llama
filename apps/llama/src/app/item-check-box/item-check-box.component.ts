@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Item, Llama } from '@llama/api-interfaces';
 import { LlamaService } from '../llama.service';
+import { UpdateCallback } from '../app.component';
 
 @Component({
   selector: 'llama-item-check-box',
@@ -10,6 +11,8 @@ import { LlamaService } from '../llama.service';
 export class ItemCheckBoxComponent implements OnInit {
   @Input('llama') llama: Llama;
   @Input('item') item: Item;
+  @Input('deletemode') deletemode: boolean;
+  @Input('updateCallback') updateCallback: UpdateCallback;
   constructor(private service: LlamaService) { }
 
   ngOnInit(): void {
@@ -21,5 +24,10 @@ export class ItemCheckBoxComponent implements OnInit {
       this.item.done = !this.item.done;
     }
     this.service.updateItem(this.llama, this.item);
+  }
+  deleteItem() {
+    this.service.deleteItem(this.llama, this.item);
+    this.llama.items = this.llama.items.filter(otherItem => otherItem.id != this.item.id);
+    this.updateCallback.update();
   }
 }
