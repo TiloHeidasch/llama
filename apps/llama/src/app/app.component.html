@@ -36,7 +36,8 @@
     <!-- Content -->
     <div class="sidenav-content paper">
       <div class="categories-container">
-        <llama-category-drop-down *ngFor="let category of activeCategories;let i = index" [category]='category'>
+        <llama-category-drop-down *ngFor="let category of activeCategories;let i = index" [category]='category'
+          [llama]='activeLlama'>
         </llama-category-drop-down>
       </div>
       <!-- Bottom Section -->

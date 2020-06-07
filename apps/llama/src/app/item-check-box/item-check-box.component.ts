@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Item } from '@llama/api-interfaces';
+import { Item, Llama } from '@llama/api-interfaces';
+import { LlamaService } from '../llama.service';
 
 @Component({
   selector: 'llama-item-check-box',
@@ -7,8 +8,9 @@ import { Item } from '@llama/api-interfaces';
   styleUrls: ['./item-check-box.component.scss']
 })
 export class ItemCheckBoxComponent implements OnInit {
+  @Input('llama') llama: Llama;
   @Input('item') item: Item;
-  constructor() { }
+  constructor(private service: LlamaService) { }
 
   ngOnInit(): void {
   }
@@ -18,6 +20,6 @@ export class ItemCheckBoxComponent implements OnInit {
     } else {
       this.item.done = !this.item.done;
     }
-    //TODO update remote
+    this.service.updateItem(this.llama, this.item);
   }
 }

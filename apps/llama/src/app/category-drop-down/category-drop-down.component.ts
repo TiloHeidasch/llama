@@ -1,5 +1,5 @@
 import { Component, OnInit, Injectable, Input } from '@angular/core';
-import { ItemCategory } from '@llama/api-interfaces';
+import { ItemCategory, Llama } from '@llama/api-interfaces';
 
 @Component({
   selector: 'llama-category-drop-down',
@@ -7,6 +7,7 @@ import { ItemCategory } from '@llama/api-interfaces';
   styleUrls: ['./category-drop-down.component.scss']
 })
 export class CategoryDropDownComponent implements OnInit {
+  @Input('llama') llama: Llama;
   @Input('category') category: ItemCategory;
   isExpanded = true;
   constructor() { }
