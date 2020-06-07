@@ -34,13 +34,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
         OverlayModule,
         PlatformModule,
         PortalModule,
-        CdkStepperModule,
-        CdkTableModule,
-        CdkTreeModule,
-        DragDropModule,
         // Material
-        MatButtonModule,
-        MatCheckboxModule,
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
@@ -48,8 +42,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
         MatListModule,
         MatSidenavModule,
         FormsModule,
-        MatTreeModule,
-        ReactiveFormsModule,
         ClickOutsideModule,
     ]
 })
