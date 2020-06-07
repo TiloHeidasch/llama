@@ -4,7 +4,7 @@
 <ng-template #elseTemplate>
   <div class="app-container">
     <!-- Toolbar -->
-    <mat-toolbar class="toolbar"
+    <mat-toolbar class="toolbar elevated"
       [ngClass]=" {'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan': activeLlamaId%3===2}">
       <button mat-icon-button (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
@@ -61,20 +61,20 @@
     <div class="bottom-section" *ngIf="!drawer.opened">
       <ng-container *ngIf="deletemode; else newItemTemplate">
         <div class="cleanup-section">
-          <button class="floating-action-button" color="warn" (click)="cleanupItems()" mat-fab>
+          <button class="floating-action-button elevated" color="warn" (click)="cleanupItems()" mat-fab>
             <mat-icon class="black">archive</mat-icon>
           </button>
         </div>
       </ng-container>
       <ng-template #newItemTemplate>
         <div class="new-item-section" (clickOutside)='addItem()'>
-          <div class="new-item-container"
+          <div class="new-item-container elevated"
             [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
             <mat-form-field class="new-item-form-field">
               <input matInput [(ngModel)]="newItemString" [placeholder]="getNewItemPlaceHolder()">
             </mat-form-field>
           </div>
-          <button class="floating-action-button"
+          <button class="floating-action-button elevated"
             [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
             (click)="addItem()" mat-fab>
             <mat-icon class="black">add</mat-icon>
