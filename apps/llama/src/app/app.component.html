@@ -34,9 +34,9 @@
         <mat-nav-list class="llama-navigation-list">
           <mat-list-item class="sidebar-nav-item" *ngFor="let llama of llamas;let i = index" (click)="select(llama,i)"
             [ngClass]="{'blue': i%3===0,'pink': i%3===1,'cyan': i%3===2}">
-            <div class="llama-deletion-container" *ngIf="deletemode">
-              <mat-icon color="warn" (click)="deleteLlama(llama)">delete_forever</mat-icon>
-            </div>
+            <button class="llama-deletion-container" *ngIf="deletemode" mat-icon-button (click)="deleteLlama(llama)">
+              <mat-icon color="warn">delete_forever</mat-icon>
+            </button>
             <span id="selected" *ngIf="activeLlama===llama">></span><span>{{llama.name}}</span>
             <div class="shadow"></div>
           </mat-list-item>
