@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Item, Llama } from '@llama/api-interfaces';
+import { ItemDto as Item, LlamaDto as Llama } from '@llama/api-interfaces';
 import { LlamaService } from '../llama.service';
 import { UpdateCallback } from '../app.component';
 

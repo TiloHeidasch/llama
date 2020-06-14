@@ -19,6 +19,7 @@ async function bootstrap() {
     .setDescription('An API that lets you track what groceries you have to buy')
     .setVersion('1.0')
     .addTag('llama')
+    .addTag('category')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);

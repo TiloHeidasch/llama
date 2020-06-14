@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Llama, CreateLlama, Item, CreateItem } from '@llama/api-interfaces';
+import { LlamaDto as Llama, CreateLlama, ItemDto as Item, CreateItem } from '@llama/api-interfaces';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Llama, Item, ItemCategory } from '@llama/api-interfaces';
+import { LlamaDto as Llama, ItemDto as Item } from '@llama/api-interfaces';
+import { LocalCategory as ItemCategory } from './local-category'
 import { LlamaService } from './llama.service';
 
 @Component({
@@ -171,7 +172,6 @@ export class AppComponent implements OnInit, UpdateCallback {
   }
   categories() { }
   select(llama, id) {
-    console.log({ activeLlama: this.activeLlama, llama });
     this.activeLlama = llama;
     this.activeLlamaId = id;
     this.update();
@@ -191,8 +191,6 @@ export class AppComponent implements OnInit, UpdateCallback {
     this.activeCategories = this.getCategories();
   }
   getNewItemPlaceHolder(): string {
-    console.log({ newItemPlaceholderCache: this.newItemPlaceholderCache });
-
     if (this.newItemPlaceholderCache === '') {
       const amount: string = this.getRandomAmount();
       const unit: string = this.getRandomUnit();

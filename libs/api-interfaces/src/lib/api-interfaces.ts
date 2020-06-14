@@ -1,17 +1,17 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ApiProperty } from '@nestjs/swagger';
 export class CreateLlama {
   //@ApiProperty({ description: 'The name of the new Llama', example: 'Groceries' })
   name: string;
 }
 export class CreateItem {
-  //@ApiProperty({ description: 'The name of the new Item', example: 'Bananas' })
   name: string;
-  //@ApiProperty({ description: 'The amount of the Item', example: '5', required: false })
   amount?: string;
-  //@ApiProperty({ description: 'The unit of the amount of the Item', example: 'kg', required: false })
   unit?: string;
   done?: boolean;
+}
+export class CreateCategory {
+  name: string;
+  itemNames?: string[];
 }
 export class Llama {
   readonly id: string;
@@ -25,6 +25,12 @@ export class Llama {
     this.items = [];
   }
 }
+export interface LlamaDto {
+  readonly id: string;
+  name: string;
+  readonly created: Date;
+  items: ItemDto[];
+}
 export class Item {
   readonly id: string;
   readonly created: Date;
@@ -32,7 +38,6 @@ export class Item {
   done: boolean;
   amount?: string;
   unit?: string;
-  category?: ItemCategory;
   constructor(name: string, amount?: string, unit?: string, done?: boolean) {
     this.id = uuidv4();
     this.created = new Date();
@@ -46,7 +51,28 @@ export class Item {
     }
   }
 }
-export interface ItemCategory {
+export interface ItemDto {
+  readonly id: string;
+  readonly created: Date;
   name: string;
-  items?: Item[];
+  done: boolean;
+  amount?: string;
+  unit?: string;
+  category?: Category;
+}
+export class Category {
+  readonly id: string;
+  name: string;
+  itemNames: string[];
+  readonly created: Date;
+  constructor(name: string, itemNames?: string[]) {
+    this.id = uuidv4();
+    this.name = name;
+    if (itemNames === undefined) {
+      itemNames = [];
+    } else {
+      this.itemNames = itemNames;
+    }
+    this.created = new Date();
+  }
 }

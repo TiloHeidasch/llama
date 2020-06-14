@@ -1,5 +1,6 @@
 import { Component, OnInit, Injectable, Input } from '@angular/core';
-import { ItemCategory, Llama } from '@llama/api-interfaces';
+import { LlamaDto as Llama } from '@llama/api-interfaces';
+import { LocalCategory as ItemCategory } from "../local-category";
 import { UpdateCallback } from '../app.component';
 
 @Component({

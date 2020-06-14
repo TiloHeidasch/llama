@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { Llama, ItemCategory, Item } from '@llama/api-interfaces';
+import { Llama, Item } from '@llama/api-interfaces';
 import { promisify } from 'util';
 import { exists, readFile, writeFile } from 'fs';
 
