@@ -68,10 +68,9 @@ export class Category {
   constructor(name: string, itemNames?: string[]) {
     this.id = uuidv4();
     this.name = name;
-    if (itemNames === undefined) {
-      itemNames = [];
-    } else {
-      this.itemNames = itemNames;
+    this.itemNames = [];
+    if (itemNames !== undefined) {
+      this.itemNames.push(...itemNames);
     }
     this.created = new Date();
   }

@@ -59,7 +59,7 @@ export class CategoryService {
                 }
             }
         }
-        throw new NotFoundException('No category found for item with name ' + itemName);
+        return undefined;
     }
     private async addCategory(category: Category): Promise<Category> {
         const file = await this.loadFile();

@@ -67,11 +67,7 @@ export class LlamaController {
     }
     private async itemToItemDto(item: Item): Promise<ItemDto> {
         let category: Category;
-        try {
-            category = await this.categoryService.getCategoryForItemName(item.name);
-        } catch (e) {
-            //ignored
-        }
+        category = await this.categoryService.getCategoryForItemName(item.name);
         const itemDto: ItemDto = {
             id: item.id,
             created: item.created,

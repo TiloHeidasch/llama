@@ -16,6 +16,7 @@ import { ObserversModule } from '@angular/cdk/observers';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PlatformModule } from '@angular/cdk/platform';
 import { PortalModule } from '@angular/cdk/portal';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 /**
  * NgModule that includes all Material modules.
@@ -29,6 +30,7 @@ import { PortalModule } from '@angular/cdk/portal';
         OverlayModule,
         PlatformModule,
         PortalModule,
+        DragDropModule,
         // Material
         MatFormFieldModule,
         MatIconModule,

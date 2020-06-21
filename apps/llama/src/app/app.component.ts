@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { LlamaDto as Llama, ItemDto as Item } from '@llama/api-interfaces';
+import { LlamaDto as Llama, ItemDto as Item, Category } from '@llama/api-interfaces';
 import { LocalCategory as ItemCategory } from './local-category'
 import { LlamaService } from './llama.service';
+import { CategoryService } from './category.service';
 
 @Component({
   selector: 'llama-root',
@@ -19,12 +19,19 @@ export class AppComponent implements OnInit, UpdateCallback {
   updateCallback: UpdateCallback = this;
   newItemPlaceholderCache: string = '';
   activeLlamaId: number = 0;
-  newItemString: string = '';
-  constructor(private service: LlamaService) { }
+  addString: string = '';
+  categoryMode: boolean = false;
+  categories: Category[] = [];
+  uncategorized: string[] = [];
+  constructor(private llamaService: LlamaService, private categoryService: CategoryService) { }
   async ngOnInit() {
-    this.llamas = await this.service.getAllLlamas();
+    this.llamas = await this.llamaService.getAllLlamas();
     this.activeLlama = this.llamas[0];
+    this.activeLlamaId = 0;
     this.activeCategories = this.getCategories();
+    this.categories = await this.categoryService.getAllCategories();
+    this.uncategorized = await this.categoryService.getUncategorizedItemNames();
+    this.categories.push({ name: 'uncategorized', id: 'uncategorized', created: new Date(), itemNames: this.uncategorized });
   }
   getCategories(): ItemCategory[] {
     const categories: ItemCategory[] = [];
@@ -49,16 +56,16 @@ export class AppComponent implements OnInit, UpdateCallback {
   }
 
   async addNewLlama() {
-    const newLlama: Llama = await this.service.createNewLlama('New Llama');
+    const newLlama: Llama = await this.llamaService.createNewLlama('New Llama');
     this.llamas.push(newLlama);
     this.activeLlama = newLlama;
     this.activeLlamaId = this.llamas.length - 1;
   }
   async deleteLlama(llama: Llama) {
-    this.service.deleteLlama(llama);
+    this.llamaService.deleteLlama(llama);
     this.llamas = this.llamas.filter(otherLlama => otherLlama.id != llama.id);
     if (this.llamas.length === 0) {
-      this.llamas = await this.service.getAllLlamas();
+      this.llamas = await this.llamaService.getAllLlamas();
     }
     if (llama.id === this.activeLlama.id) {
       this.select(this.llamas[0], 0);
@@ -66,24 +73,38 @@ export class AppComponent implements OnInit, UpdateCallback {
   }
   cleanupItems() {
     this.activeLlama.items = this.activeLlama.items.filter(item => !item.done);
-    this.service.updateLlama(this.activeLlama)
+    this.llamaService.updateLlama(this.activeLlama)
     this.update();
+  }
+  add() {
+    if (this.categoryMode) {
+      this.addCategory();
+    } else {
+      this.addItem();
+    }
   }
   addItem() {
     this.pushStringToNewItem();
     this.resetItemPlaceholderCache();
   }
-  private async pushStringToNewItem() {
-    if (this.newItemString.trim() !== '') {
-      const newItem: Item = await this.parseNewItem(this.newItemString);
-      this.activeLlama.items.push(newItem);
-      this.newItemString = '';
+  async addCategory() {
+    if (this.addString !== '') {
+      this.categories.push(await this.categoryService.addCategory(this.addString));
+      this.addString = '';
       this.update();
     }
   }
-  async parseNewItem(newItemString: string): Promise<Item> {
+  private async pushStringToNewItem() {
+    if (this.addString.trim() !== '') {
+      const newItem: Item = await this.parseNewItem(this.addString);
+      this.activeLlama.items.push(newItem);
+      this.addString = '';
+      this.update();
+    }
+  }
+  async parseNewItem(addString: string): Promise<Item> {
     try {
-      const amountUnit: string = newItemString.match(this.getAmountUnitRegexp()).toString().trim();
+      const amountUnit: string = addString.match(this.getAmountUnitRegexp()).toString().trim();
       const amount: string = amountUnit.match(this.getAmountRegexp()).toString().trim();
       let unit: string = amountUnit.replace(amount, '').trim();
       switch (unit) {
@@ -110,17 +131,17 @@ export class AppComponent implements OnInit, UpdateCallback {
         default:
           break;
       }
-      const name: string = newItemString.replace(amountUnit, '').trim();
-      const item: Item = await this.service.createNewItem(this.activeLlama, name, amount, unit);
+      const name: string = addString.replace(amountUnit, '').trim();
+      const item: Item = await this.llamaService.createNewItem(this.activeLlama, name, amount, unit);
       return item;
     } catch (ignored) {
       try {
-        const amount: string = newItemString.match(this.getAmountRegexp()).toString().trim();
-        const name: string = newItemString.replace(amount, '').trim();
-        const item: Item = await this.service.createNewItem(this.activeLlama, name, amount);
+        const amount: string = addString.match(this.getAmountRegexp()).toString().trim();
+        const name: string = addString.replace(amount, '').trim();
+        const item: Item = await this.llamaService.createNewItem(this.activeLlama, name, amount);
         return item;
       } catch (ignored) {
-        const item: Item = await this.service.createNewItem(this.activeLlama, newItemString);
+        const item: Item = await this.llamaService.createNewItem(this.activeLlama, addString);
         return item;
       }
     }
@@ -170,9 +191,12 @@ export class AppComponent implements OnInit, UpdateCallback {
     });
     return new RegExp(regexp);
   }
-  categories() { }
+  selectCategories() {
+    this.categoryMode = true;
+  }
   select(llama, id) {
-    this.activeLlama = llama;
+    this.categoryMode = false;
+    this.activeLlama = this.llamas[id];
     this.activeLlamaId = id;
     this.update();
   }
@@ -184,11 +208,15 @@ export class AppComponent implements OnInit, UpdateCallback {
   async stopEdit() {
     if (this.editNameFuse) {
       this.editLlamaNameMode = false;
-      this.activeLlama = await this.service.updateLlama(this.activeLlama);
+      this.activeLlama = await this.llamaService.updateLlama(this.activeLlama);
     }
   }
-  update() {
+  async update() {
+    this.llamas = await this.llamaService.getAllLlamas();
     this.activeCategories = this.getCategories();
+    this.categories = await this.categoryService.getAllCategories();
+    this.uncategorized = await this.categoryService.getUncategorizedItemNames();
+    this.categories.push({ name: 'uncategorized', id: 'uncategorized', created: new Date(), itemNames: this.uncategorized });
   }
   getNewItemPlaceHolder(): string {
     if (this.newItemPlaceholderCache === '') {

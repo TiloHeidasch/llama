@@ -1,0 +1,20 @@
+<div id="category-container" cdkDropList cdkDropListSortingDisabled id="{{category.id}}"
+    [cdkDropListConnectedTo]='otherCategories' (cdkDropListDropped)="dragEnd($event)">
+    <div id="category-header">
+        <div id="header-start">
+            <div id="category-name">
+                <span class="pencil">{{category.name}}</span>
+            </div>
+        </div>
+        <div id="header-end">
+            <div id="item-counter">
+                <span class="pencil-small">{{getTotalItems()}}</span>
+            </div>
+        </div>
+    </div>
+    <div>
+        <llama-item-name-drag-drop *ngFor="let itemName of category.itemNames" [itemName]="itemName"
+            [category]="category" [deletemode]='deletemode' [updateCallback]='updateCallback'>
+        </llama-item-name-drag-drop>
+    </div>
+</div>

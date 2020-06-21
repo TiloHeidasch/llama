@@ -1,0 +1,19 @@
+<div cdkDrag cdkDragLockAxis="y">
+    <div class="item-container">
+        <div class="interaction-container">
+            <ng-container *ngIf="deletemode && category.id!==''; else handleTemplate">
+                <div class="item-deletion-container">
+                    <mat-icon color="warn" (click)="deleteItem()">delete_forever</mat-icon>
+                </div>
+            </ng-container>
+            <ng-template #handleTemplate>
+                <div class="item-drag-handle" cdkDragHandle>
+                    <mat-icon>drag_handle</mat-icon>
+                </div>
+            </ng-template>
+        </div>
+        <div id="name-container">
+            <span class="pencil-small">{{itemName}}</span>
+        </div>
+    </div>
+</div>

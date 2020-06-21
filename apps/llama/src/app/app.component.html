@@ -9,10 +9,15 @@
       <button mat-icon-button (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-      <span *ngIf="!editLlamaNameMode" class="heading" (click)="editName()">{{activeLlama.name}}</span>
-      <mat-form-field *ngIf="editLlamaNameMode" (clickOutside)="stopEdit()">
-        <input matInput [(ngModel)]=" activeLlama.name">
-      </mat-form-field>
+      <ng-container *ngIf="categoryMode; else llamaHeadingTemplate">
+        <span class="heading">Categories</span>
+      </ng-container>
+      <ng-template #llamaHeadingTemplate>
+        <span *ngIf="!editLlamaNameMode" class="heading" (click)="editName()">{{activeLlama.name}}</span>
+        <mat-form-field *ngIf="editLlamaNameMode" (clickOutside)="stopEdit()">
+          <input matInput [(ngModel)]=" activeLlama.name">
+        </mat-form-field>
+      </ng-template>
       <div class="delete-toggle-section">
         <mat-slide-toggle color="warn" [(ngModel)]="deletemode">
           <ng-container *ngIf="deletemode; else deleteMockTemplate">
@@ -37,7 +42,7 @@
             <button class="llama-deletion-container" *ngIf="deletemode" mat-icon-button (click)="deleteLlama(llama)">
               <mat-icon color="warn">delete_forever</mat-icon>
             </button>
-            <span id="selected" *ngIf="activeLlama===llama">></span><span>{{llama.name}}</span>
+            <span id="selected" *ngIf="activeLlamaId===i&&categoryMode===false">></span><span>{{llama.name}}</span>
             <div class="shadow"></div>
           </mat-list-item>
           <mat-list-item class="sidebar-nav-item" id="create-new" (click)="addNewLlama()">New
@@ -45,40 +50,64 @@
           </mat-list-item>
         </mat-nav-list>
         <mat-nav-list class="settings-navigation-list">
-          <mat-list-item class="sidebar-nav-item" id="categories" (click)="categories()">Categories</mat-list-item>
+          <mat-list-item class="sidebar-nav-item" id="categories" (click)="selectCategories()"><span id="selected"
+              *ngIf="categoryMode">></span><span>Categories</span>
+          </mat-list-item>
         </mat-nav-list>
       </mat-drawer>
       <!-- Content -->
       <div class="sidenav-content paper">
         <div class="categories-container">
-          <llama-category-drop-down *ngFor="let category of activeCategories;let i = index" [category]='category'
-            [llama]='activeLlama' [deletemode]='deletemode' [updateCallback]='updateCallback'>
-          </llama-category-drop-down>
+          <ng-container *ngIf="categoryMode; else llamaTemplate">
+            <llama-category-drag-drop *ngFor="let category of categories" [category]='category'
+              [categories]='categories' [deletemode]='deletemode' [updateCallback]='updateCallback'>
+            </llama-category-drag-drop>
+          </ng-container>
+          <ng-template #llamaTemplate>
+            <llama-category-drop-down *ngFor="let category of activeCategories" [category]='category'
+              [llama]='activeLlama' [deletemode]='deletemode' [updateCallback]='updateCallback'>
+            </llama-category-drop-down>
+          </ng-template>
         </div>
       </div>
     </mat-drawer-container>
     <!-- Bottom Section -->
     <div class="bottom-section" *ngIf="!drawer.opened">
-      <ng-container *ngIf="deletemode; else newItemTemplate">
+      <ng-container *ngIf="deletemode&&!categoryMode; else addTemplate">
         <div class="cleanup-section">
           <button class="floating-action-button elevated" color="warn" (click)="cleanupItems()" mat-fab>
             <mat-icon class="black">archive</mat-icon>
           </button>
         </div>
       </ng-container>
-      <ng-template #newItemTemplate>
-        <div class="new-item-section" (clickOutside)='addItem()'>
-          <div class="new-item-container elevated"
-            [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
-            <mat-form-field class="new-item-form-field">
-              <input matInput [(ngModel)]="newItemString" [placeholder]="getNewItemPlaceHolder()">
-            </mat-form-field>
-          </div>
-          <button class="floating-action-button elevated"
-            [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
-            (click)="addItem()" mat-fab>
-            <mat-icon class="black">add</mat-icon>
-          </button>
+      <ng-template #addTemplate>
+        <div class="add-section" (clickOutside)='add()'>
+          <ng-container *ngIf="categoryMode; else newItemTemplate">
+            <div class="add-container elevated"
+              [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
+              <mat-form-field class="add-form-field">
+                <input matInput [(ngModel)]="addString" placeholder="New Category">
+              </mat-form-field>
+            </div>
+            <button class="floating-action-button elevated"
+              [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
+              (click)="add()" mat-fab>
+              <mat-icon class="black">add</mat-icon>
+            </button>
+          </ng-container>
+          <ng-template #newItemTemplate>
+            <div class="add-container elevated"
+              [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
+              <mat-form-field class="add-form-field">
+                <input matInput [(ngModel)]="addString" [placeholder]="getNewItemPlaceHolder()">
+              </mat-form-field>
+            </div>
+            <button class="floating-action-button elevated"
+              [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}"
+              (click)="add()" mat-fab>
+              <mat-icon class="black">add</mat-icon>
+            </button>
+          </ng-template>
         </div>
       </ng-template>
     </div>
