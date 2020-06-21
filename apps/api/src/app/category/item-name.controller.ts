@@ -20,6 +20,7 @@ export class ItemNameController {
     @Get()
     async getAllItemNames(): Promise<string[]> {
         const llamas: Llama[] = await this.llamaService.getAllLlamas();
+        const categories: Category[] = await this.service.getAllCategorys();
         const itemNames: string[] = [];
         for (let index = 0; index < llamas.length; index++) {
             const llama = llamas[index];
@@ -27,6 +28,15 @@ export class ItemNameController {
                 const item = llama.items[itemIndex];
                 if (itemNames.find(string => string === item.name) === undefined) {
                     itemNames.push(item.name);
+                }
+            }
+        }
+        for (let index = 0; index < categories.length; index++) {
+            const category = categories[index];
+            for (let itemIndex = 0; itemIndex < category.itemNames.length; itemIndex++) {
+                const itemName = category.itemNames[itemIndex];
+                if (itemNames.find(string => string === itemName) === undefined) {
+                    itemNames.push(itemName);
                 }
             }
         }
