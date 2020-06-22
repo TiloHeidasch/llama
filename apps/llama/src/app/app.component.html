@@ -86,7 +86,7 @@
             <div class="add-container elevated"
               [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
               <mat-form-field class="add-form-field">
-                <input matInput [(ngModel)]="addString" placeholder="New Category">
+                <input matInput [formControl]="addStringFormControl" placeholder="New Category">
               </mat-form-field>
             </div>
             <button class="floating-action-button elevated"
@@ -99,7 +99,13 @@
             <div class="add-container elevated"
               [ngClass]="{'blue': activeLlamaId%3===0,'pink': activeLlamaId%3===1,'cyan':  activeLlamaId%3===2}">
               <mat-form-field class="add-form-field">
-                <input matInput [(ngModel)]="addString" [placeholder]="getNewItemPlaceHolder()">
+                <input matInput [formControl]="addStringFormControl" [matAutocomplete]="auto"
+                  [placeholder]="getNewItemPlaceHolder()">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let itemName of filteredNewItemOptions | async" [value]="itemName">
+                    {{itemName}}
+                  </mat-option>
+                </mat-autocomplete>
               </mat-form-field>
             </div>
             <button class="floating-action-button elevated"

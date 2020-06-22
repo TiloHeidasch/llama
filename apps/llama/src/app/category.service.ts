@@ -15,6 +15,14 @@ export class CategoryService {
     const createCategory: CreateCategory = { name };
     return await this.http.post<Category>('/api/category', createCategory).toPromise();
   }
+  async getAllItemNames(): Promise<string[]> {
+    let itemNames: string[] = await (await this.http.get<string[]>('/api/itemName').toPromise()).sort((itemName1, itemName2) => {
+      if (itemName1 > itemName2) return 1;
+      if (itemName1 < itemName2) return -1;
+      return 0;
+    });
+    return itemNames;
+  }
   async getUncategorizedItemNames(): Promise<string[]> {
     let uncategorizedItemNames: string[] = await (await this.http.get<string[]>('/api/itemName/uncategorized').toPromise()).sort((itemName1, itemName2) => {
       if (itemName1 > itemName2) return 1;

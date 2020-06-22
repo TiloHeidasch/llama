@@ -3,6 +3,10 @@ import { LlamaDto as Llama, ItemDto as Item, Category } from '@llama/api-interfa
 import { LocalCategory as ItemCategory } from './local-category'
 import { LlamaService } from './llama.service';
 import { CategoryService } from './category.service';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { start } from 'repl';
 
 @Component({
   selector: 'llama-root',
@@ -19,10 +23,12 @@ export class AppComponent implements OnInit, UpdateCallback {
   updateCallback: UpdateCallback = this;
   newItemPlaceholderCache: string = '';
   activeLlamaId: number = 0;
-  addString: string = '';
   categoryMode: boolean = false;
   categories: Category[] = [];
   uncategorized: string[] = [];
+  addStringFormControl = new FormControl();
+  allItemNames: string[] = [];
+  filteredNewItemOptions: Observable<string[]>;
   constructor(private llamaService: LlamaService, private categoryService: CategoryService) { }
   async ngOnInit() {
     this.llamas = await this.llamaService.getAllLlamas();
@@ -32,6 +38,12 @@ export class AppComponent implements OnInit, UpdateCallback {
     this.categories = await this.categoryService.getAllCategories();
     this.uncategorized = await this.categoryService.getUncategorizedItemNames();
     this.categories.push({ name: 'uncategorized', id: 'uncategorized', created: new Date(), itemNames: this.uncategorized });
+    this.allItemNames = await this.categoryService.getAllItemNames();
+    this.filteredNewItemOptions = this.addStringFormControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
   }
   getCategories(): ItemCategory[] {
     const categories: ItemCategory[] = [];
@@ -88,17 +100,17 @@ export class AppComponent implements OnInit, UpdateCallback {
     this.resetItemPlaceholderCache();
   }
   async addCategory() {
-    if (this.addString !== '') {
-      this.categories.push(await this.categoryService.addCategory(this.addString));
-      this.addString = '';
+    if (this.addStringFormControl.value !== '') {
+      this.categories.push(await this.categoryService.addCategory(this.addStringFormControl.value));
+      this.addStringFormControl.setValue('');
       this.update();
     }
   }
   private async pushStringToNewItem() {
-    if (this.addString.trim() !== '') {
-      const newItem: Item = await this.parseNewItem(this.addString);
+    if (this.addStringFormControl.value.trim() !== '') {
+      const newItem: Item = await this.parseNewItem(this.addStringFormControl.value);
       this.activeLlama.items.push(newItem);
-      this.addString = '';
+      this.addStringFormControl.setValue('');
       this.update();
     }
   }
@@ -217,6 +229,7 @@ export class AppComponent implements OnInit, UpdateCallback {
     this.categories = await this.categoryService.getAllCategories();
     this.uncategorized = await this.categoryService.getUncategorizedItemNames();
     this.categories.push({ name: 'uncategorized', id: 'uncategorized', created: new Date(), itemNames: this.uncategorized });
+    this.allItemNames = await this.categoryService.getAllItemNames();
   }
   getNewItemPlaceHolder(): string {
     if (this.newItemPlaceholderCache === '') {
@@ -253,6 +266,22 @@ export class AppComponent implements OnInit, UpdateCallback {
   }
   private randbetween(min, max) {
     return Math.floor(Math.random() * max) + min;
+  }
+  private _filter(value: string): string[] {
+    let amountUnit: string = '';
+    let amount: string = '';
+    try {
+      amount = value.toLowerCase().match(this.getAmountRegexp()).toString().trim();
+    } catch (ignored) {
+
+    }
+    try {
+      amountUnit = value.toLowerCase().match(this.getAmountUnitRegexp()).toString().trim();
+    } catch (ignored) {
+
+    }
+    const filterValue = value.toLowerCase().replace(amountUnit, '').trim().replace(amount, '').trim();
+    return this.allItemNames.filter(option => option.toLowerCase().includes(filterValue));
   }
 }
 export interface UpdateCallback {
