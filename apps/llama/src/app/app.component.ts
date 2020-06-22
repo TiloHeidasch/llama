@@ -6,7 +6,6 @@ import { CategoryService } from './category.service';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { start } from 'repl';
 
 @Component({
   selector: 'llama-root',
