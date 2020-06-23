@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ItemDto as Item, LlamaDto as Llama } from '@llama/api-interfaces';
 import { LlamaService } from '../llama.service';
 import { UpdateCallback } from '../app.component';
+import { EmojiService } from '../emoji.service';
 
 @Component({
   selector: 'llama-item-check-box',
@@ -13,9 +14,10 @@ export class ItemCheckBoxComponent implements OnInit {
   @Input('item') item: Item;
   @Input('deletemode') deletemode: boolean;
   @Input('updateCallback') updateCallback: UpdateCallback;
-  constructor(private service: LlamaService) { }
-
-  ngOnInit(): void {
+  emoji: string = '';
+  constructor(private service: LlamaService, private emojiService: EmojiService) { }
+  async ngOnInit() {
+    this.emoji = await this.emojiService.getEmojiForText(this.item.name);
   }
   toggleDone() {
     if (this.item.done === undefined) {
