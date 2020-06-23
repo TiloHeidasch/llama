@@ -99,14 +99,14 @@ export class AppComponent implements OnInit, UpdateCallback {
     this.resetItemPlaceholderCache();
   }
   async addCategory() {
-    if (this.addStringFormControl.value !== '') {
+    if (this.addStringFormControl.value !== null && this.addStringFormControl.value !== '') {
       this.categories.push(await this.categoryService.addCategory(this.addStringFormControl.value));
       this.addStringFormControl.setValue('');
       this.update();
     }
   }
   private async pushStringToNewItem() {
-    if (this.addStringFormControl.value.trim() !== '') {
+    if (this.addStringFormControl.value !== null && this.addStringFormControl.value.trim() !== '') {
       const newItem: Item = await this.parseNewItem(this.addStringFormControl.value);
       this.activeLlama.items.push(newItem);
       this.addStringFormControl.setValue('');
