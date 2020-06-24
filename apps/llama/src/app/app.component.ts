@@ -272,8 +272,10 @@ export class AppComponent implements OnInit, UpdateCallback {
     this.newItemPlaceholderCache = '';
   }
   getRandomItemName(): string {
-    const itemNames: string[] = ['Banana', 'Apple', 'Cherry',];
-    return itemNames[this.randbetween(0, itemNames.length - 1)];
+    if (this.allItemNames === undefined || this.allItemNames.length === 0) {
+      return 'Banana';
+    }
+    return this.allItemNames[this.randbetween(0, this.allItemNames.length - 1)];
   }
   getRandomUnit(): string {
     const unitNames: string[] = ['kg', 'pcs', 'pieces', 'packs',];
