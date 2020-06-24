@@ -6,6 +6,7 @@ import { CategoryService } from './category.service';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { EmojiService } from './emoji.service';
 
 @Component({
   selector: 'llama-root',
@@ -28,7 +29,8 @@ export class AppComponent implements OnInit, UpdateCallback {
   addStringFormControl = new FormControl();
   allItemNames: string[] = [];
   filteredNewItemOptions: Observable<string[]>;
-  constructor(private llamaService: LlamaService, private categoryService: CategoryService) { }
+  emoji: string = '+';
+  constructor(private llamaService: LlamaService, private categoryService: CategoryService, private emojiService: EmojiService) { }
   async ngOnInit() {
     this.llamas = await this.llamaService.getAllLlamas();
     this.activeLlama = this.llamas[0];
@@ -43,6 +45,22 @@ export class AppComponent implements OnInit, UpdateCallback {
         startWith(''),
         map(value => this._filter(value))
       );
+    this.addStringFormControl.valueChanges.subscribe((value) => {
+      this.fetchEmojiForText(value);
+    });
+  }
+  async fetchEmojiForText(text: string) {
+    let emoji = '';
+    if (text !== null && text !== undefined && text !== '' && text.length > 2) {
+      emoji = await this.emojiService.getEmojiForText(text);
+      if (emoji !== '') {
+        this.emoji = emoji;
+      } else {
+        this.emoji = '+';
+      }
+    } else {
+      this.emoji = '+';
+    }
   }
   getCategories(): ItemCategory[] {
     const categories: ItemCategory[] = [];
@@ -97,6 +115,7 @@ export class AppComponent implements OnInit, UpdateCallback {
   addItem() {
     this.pushStringToNewItem();
     this.resetItemPlaceholderCache();
+    this.emoji = '+';
   }
   async addCategory() {
     if (this.addStringFormControl.value !== null && this.addStringFormControl.value !== '') {
