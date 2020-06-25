@@ -20,12 +20,14 @@ export class ItemCheckBoxComponent implements OnInit {
     this.emoji = await this.emojiService.getEmojiForText(this.item.name);
   }
   toggleDone() {
-    if (this.item.done === undefined) {
-      this.item.done = true;
-    } else {
-      this.item.done = !this.item.done;
+    if (!this.deletemode) {
+      if (this.item.done === undefined) {
+        this.item.done = true;
+      } else {
+        this.item.done = !this.item.done;
+      }
+      this.service.updateItem(this.llama, this.item);
     }
-    this.service.updateItem(this.llama, this.item);
   }
   deleteItem() {
     this.service.deleteItem(this.llama, this.item);
