@@ -7,9 +7,16 @@
             </div>
         </div>
         <div id="header-end">
-            <div id="item-counter">
-                <span class="pencil-small">{{getTotalItems()}}</span>
-            </div>
+            <ng-container *ngIf="deletemode&&category.id!='uncategorized'; else itemCounterTemplate">
+                <div class="category-deletion-container">
+                    <mat-icon color="warn" (click)="deleteCategory()">delete_forever</mat-icon>
+                </div>
+            </ng-container>
+            <ng-template #itemCounterTemplate>
+                <div id="item-counter">
+                    <span class="pencil-small">{{getTotalItems()}}</span>
+                </div>
+            </ng-template>
         </div>
     </div>
     <div>

@@ -34,5 +34,7 @@ export class CategoryService {
   async updateCategory(category: Category): Promise<Category> {
     return await this.http.put<Category>('/api/category', category).toPromise();
   }
-
+  async deleteCategory(category: Category) {
+    await this.http.delete('/api/category/' + category.id).toPromise();
+  }
 }

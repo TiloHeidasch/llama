@@ -38,4 +38,11 @@ export class CategoryDragDropComponent implements OnInit {
       this.updateCallback.update();
     }
   }
+  async deleteCategory() {
+    const uncategorizedCategory: Category = this.categories.find(category => category.id === 'uncategorized');
+    uncategorizedCategory.itemNames.push(...this.category.itemNames);
+    this.categories = this.categories.filter(category => category.id !== this.category.id);
+    await this.service.deleteCategory(this.category);
+    this.updateCallback.update();
+  }
 }
