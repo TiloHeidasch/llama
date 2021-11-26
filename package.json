@@ -61,7 +61,7 @@
     "tslint": "~6.0.0",
     "eslint": "6.8.0",
     "typescript": "~3.8.3",
-    "prettier": "2.0.4",
+    "prettier": "2.5.0",
     "@nrwl/nest": "9.3.0",
     "@angular/compiler-cli": "^9.1.0",
     "@angular/language-service": "^9.1.0",
