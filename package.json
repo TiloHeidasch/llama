@@ -70,7 +70,7 @@
     "jest-preset-angular": "8.1.2",
     "@nrwl/jest": "9.3.0",
     "jest": "25.2.3",
-    "@types/jest": "25.1.4",
+    "@types/jest": "27.4.1",
     "ts-jest": "25.2.1",
     "@nrwl/node": "9.3.0",
     "@nestjs/schematics": "^6.7.0",
