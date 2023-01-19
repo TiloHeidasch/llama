@@ -44,7 +44,7 @@
     "@nestjs/platform-express": "^6.8.3",
     "@nestjs/swagger": "^4.5.7",
     "@nrwl/angular": "9.3.0",
-    "core-js": "^2.5.4",
+    "core-js": "^3.27.2",
     "ng-click-outside": "^6.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.4",
